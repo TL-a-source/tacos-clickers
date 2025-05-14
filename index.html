@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Taco Clicker</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f5deb3;
+      color: #3b2d17;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      background-color: #ffcc00;
+      margin: 0;
+      padding: 20px;
+      font-size: 36px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    h1:hover {
+      background-color: #ffd700;
+      transform: scale(1.02);
+    }
+
+    h1:active {
+      animation: clickAnim 0.3s ease;
+      background-color: #ffe461;
+    }
+
+    @keyframes clickAnim {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    #tacoCount {
+      color: #ff4444;
+      font-weight: bold;
+    }
+
+    #game {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .section {
+      border: 2px solid #3b2d17;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff8dc;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    img {
+      width: 150px;
+      display: block;
+      margin: 20px auto;
+    }
+
+    #classementListe {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    #classementListe li {
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    .afk-notification {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #ffcc00;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #3b2d17;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .afk-notification.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div id="game">
+  <h1 id="titreJeu" onclick="clickTaco()">🌮 Taco Clicker 🌮 - <span id="tacoCount">0</span> taco(s)</h1>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Taco_with_beef.png " alt="Taco">
+
+  <div class="section">
+    <h2>Producteurs</h2>
+    <button onclick="acheter('tortillero')">Tortillero (1/sec) - 500 tacos</button>
+    <p>Tortilleros : <span id="tortilleroCount">0</span></p>
+    <button onclick="acheter('chef')">Chef Mexicain (10/sec) - 5000 tacos</button>
+    <p>Chefs Mexicains : <span id="chefCount">0</span></p>
+    <button onclick="acheter('restaurant')">Restaurant (100/sec) - 50000 tacos</button>
+    <p>Restaurants : <span id="restaurantCount">0</span></p>
+  </div>
+
+  <div class="section">
+    <h2>Améliorations</h2>
+    <button onclick="regarderPub('doubleProduction')">Regarder une pub - Double Production</button>
+    <p>Actif : <span id="doubleProductionStatus">Non</span></p>
+    <button onclick="regarderPub('reductionPrix')">Regarder une pub - Réduction de Prix</button>
+    <p>Réduction appliquée : <span id="reductionPrixStatus">Non</span></p>
+  </div>
+
+  <div class="section">
+    <h2>Mode AFK</h2>
+    <button id="btnAfk" onclick="toggleAfk()">Désactiver le mode AFK</button>
+    <p id="afkStatus">Statut : Inactif</p>
+  </div>
+
+  <div class="section">
+    <h2>Classement</h2>
+    <ul id="classementListe"></ul>
+  </div>
+
+  <footer>Sauvegarde automatique activée.</footer>
+</div>
+
+<!-- Notification AFK -->
+<div id="afkNotification" class="afk-notification">Mode AFK activé automatiquement</div>
+
+<!-- Firebase SDK -->
+<script type="module" src="./firebase-init.js"></script>
+
+<!-- Script principal -->
+<script type="module" src="./script.js"></script>
+
+</body>
+</html>

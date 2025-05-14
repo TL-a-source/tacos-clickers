@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscription - Taco Clicker</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background-color: #f5deb3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-box {
+      background-color: #fff8dc;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #3b2d17;
+      margin-bottom: 20px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #ffe461;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .link {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .link a {
+      color: #3b2d17;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="form-box">
+  <h2>Créer un compte</h2>
+  <input type="text" id="username" placeholder="Nom d'utilisateur">
+  <input type="password" id="password" placeholder="Mot de passe">
+  <button onclick="register()">S'inscrire</button>
+  <div class="link">
+    <p>Déjà un compte ? <a href="login.html">Connectez-vous</a></p>
+  </div>
+  <p class="error" id="errorMsg"></p>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { db } from './firebase-init.js';
+  import { ref, set, get } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js ';
+
+  window.register = function () {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.textContent = "";
+
+    if (!username || !password) {
+      errorMsg.textContent = "Veuillez remplir tous les champs.";
+      return;
+    }
+
+    const userRef = ref(db, "users/" + username);
+
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        errorMsg.textContent = "Ce nom est déjà pris.";
+      } else {
+        set(userRef, {
+          password: password,
+          score: 0,
+          createdAt: Date.now()
+        }).then(() => {
+          alert("Compte créé !");
+          window.location.href = "login.html";
+        }).catch((error) => {
+          console.error("Erreur Firebase :", error);
+          errorMsg.textContent = "Une erreur est survenue.";
+        });
+      }
+    }).catch((error) => {
+      console.error("Erreur Firebase :", error);
+      errorMsg.textContent = "Erreur de base de données.";
+    });
+  };
+</script>
+</body>
+</html>
